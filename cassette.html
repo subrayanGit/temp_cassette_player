@@ -66,8 +66,14 @@
 							console.log(songs);
 							$( '#vc-container' ).cassette(songs);
 						}
+						if (this.readyState == 4 && this.status !== 200) {
+							let songData = ["songs/BlueDucks_FourFlossFiveSix.mp3","http://localhost/xml-url-php/songs/Come_And_Get_Your_Love.mp3"];
+							let songs = {'songs':songData};
+
+						}
+
 					};
-					xhttp.open("POST", "php/songs.json", true);
+					xhttp.open("GET", "php/songs.json", true);
 					xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 					xhttp.send();
 				});
