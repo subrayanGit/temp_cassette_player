@@ -1,0 +1,164 @@
+<div class="de elCountdownEvergreen elMargin0 ui-droppable elAlign_center de-editable"
+id="tmp_countdown_evergreen-63112-113-188" style="margin-top: 10px; outline: none;
+cursor: pointer;">
+<div class="wideCountdownEvergreen clearfix cdLabelBold wideCountdownSize2
+cdYellow cdStyleGradient cdLabelWhite is-countdown">
+<span class="countdown-row countdown-show3">
+<span class="countdown-section">
+<span class="countdown-amount" id="minute1">00</span>
+<span class="countdown-period">Minute</span>
+</span>
+<span class="countdown-section">
+<span class="countdown-amount" id="second1">00</span>
+<span class="countdown-period">Second</span>
+</span>
+<span class="countdown-section">
+<span class="countdown-amount" id="msecond1">00</span>
+<span class="countdown-period">MILLISECOND</span>
+</span>
+</span>
+</div>
+</div>
+<style>
+@import
+url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap');
+body {
+outline: none;
+font-size: 14px;
+ line-height: 1.42857143;
+ font-family: Montserrat, Helvetica, sans-serif !important;
+ background: #000000;
+}
+.elAlign_center {
+ text-align: center;
+}
+.de-editable {
+ position: relative;
+}
+.de-editable {
+ cursor: auto !important;
+}
+div {
+ display: block;
+}
+.is-countdown {
+ display: inline-block;
+ margin-left: auto;
+ margin-right: auto;
+}
+.countdown-row {
+ clear: both;
+ width: 100%;
+ padding: 0px 2px;
+ text-align: center;
+}
+.countdown-section:first-child {
+ padding-left: 0px;
+}
+.countdown-section {
+ display: block;
+ float: left;
+ text-align: center;
+ border-radius: 5px;
+ margin: 0px;
+ padding: 0px 10px;
+}
+.cdYellow.cdStyleGradient .countdown-amount{
+ background: linear-gradient(to bottom, #B21914 0%, #5E0907 100%);
+ color: white;
+ border: 2px solid #400605;
+ text-shadow: 1px 1px 0px rgb(255 255 255 / 30%);
+}
+.cdStyleGradient .countdown-amount {
+ padding: 10px;
+ margin-bottom: 10px;
+ text-align: center;
+ box-shadow: 0 1px 5px rgb(0 0 0 / 10%), inset 0 1px 0 rgb(255 255 255 / 20%);
+}
+.wideCountdownSize2 .countdown-amount {
+ font-size: 27px;
+ min-width: 69px;
+}
+.countdown-amount {
+ display: inline-block;
+ }
+ .wideCountdownSize2 .countdown-period {
+ font-size: 10px;
+}
+.cdLabelWhite .countdown-period {
+ color: rgba(255,255,255,0.3);
+}
+.cdLabelBold .countdown-period {
+ font-weight: bold;
+}
+.countdown-period {
+ display: block;
+ text-transform: uppercase;
+}
+</style>
+<script>
+function Countdown(elem, seconds, globalStartTime, globalEndTime) {
+ var that = {};
+ that.elem = elem;
+ that.seconds = seconds;
+ that.totalTime = seconds * 100;
+ that.usedTime = 0;
+ that.startTime = +globalStartTime;
+ //console.log(globalEndTime/10);
+ //that.startTime = +new Date();
+ that.timer = null;
+ that.count = function() {
+ that.usedTime = Math.floor((+new Date() - that.startTime) / 10);
+ var tt = that.totalTime - that.usedTime;
+ if (tt <= 0) {
+ // clearInterval(that.timer);
+ that.seconds = seconds;
+ that.totalTime = seconds * 100;
+ that.startTime = +new Date()
+ } else {
+ var mi = Math.floor(tt / (60 * 100));
+ var ss = Math.floor((tt - mi * 60 * 100) / 100);
+ var ms = tt - Math.floor(tt / 100) * 100;
+ that.elem[0].innerHTML = that.fillZero(mi);
+ that.elem[1].innerHTML = that.fillZero(ss);
+ that.elem[2].innerHTML = that.fillZero(ms);
+ }
+ };
+ that.init = function() {
+ if(that.timer){
+ clearInterval(that.timer);
+ that.totalTime = seconds * 100;
+ that.usedTime = 0;
+ that.startTime = +new Date();
+ that.timer = null;
+ }
+ };
+ that.start = function() {
+ if(!that.timer){
+ that.timer = setInterval(that.count, 1);
+ }
+ };
+ that.stop = function() {
+ console.log('usedTime = ' + countdown.usedTime);
+ if (that.timer) clearInterval(that.timer);
+ };
+ that.fillZero = function(num) {
+ return num < 10 ? '0' + num : num;
+ };
+ return that;
+}
+var minute = document.getElementById('minute1');
+var second = document.getElementById('second1');
+var msecond = document.getElementById('msecond1');
+//set first value to local storage 
+var globalStartTime = new Date();
+var globalEndTime = new Date('2022-10-21 23:59:59');
+if(localStorage.getItem('startTime') === null){
+	localStorage.setItem("startTime", globalStartTime);	
+}else{
+	globalStartTime = new Date(localStorage.getItem('startTime'));
+}
+
+var countdown = new Countdown([minute, second, msecond], 900, globalStartTime, globalEndTime);
+countdown.start();
+</script>

@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Old School Cassette Player with HTML5 Audio</title>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        <meta name="description" content="Old School Cassette Player with HTML5 Audio: Vintage format meets modern web tech: an HTML5 audio player with realistic controls" />
+        <meta name="keywords" content="cassette, html5, audio, player, css3, buttons, sounds, vintage, old school, javascript, jquery" />
+        <meta name="author" content="Codrops" />
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+		<link rel="stylesheet" type="text/css" href="css/knobKnob.css" />
+    </head>
+    <body>
+        <div class="container">
+
+			<div id="vc-container" class="vc-container">
+				<div class="vc-tape-wrapper">
+					<div class="vc-tape">
+						<div class="vc-tape-back">
+							<div class="vc-tape-wheel vc-tape-wheel-left"><div></div></div>
+							<div class="vc-tape-wheel vc-tape-wheel-right"><div></div></div>
+						</div>
+						<div class="vc-tape-front vc-tape-side-a">
+							<span>A</span>
+						</div>
+						<div class="vc-tape-front vc-tape-side-b">
+							<span>B</span>
+						</div>
+					</div>
+				</div>
+				<div class="vc-loader"></div>
+				<div class="vc-name" id="song-name"> <em> </em></div>
+			</div><!-- //vc-container -->
+		
+		<table>
+			<thead> 
+				<tr>
+					<td> </td>
+				</tr>
+			</thead>
+			<tbody id="all-songs-list">
+			
+			</tbody>
+		</table>
+		
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<!-- KnobKnob by Martin Angelov : https://github.com/martinaglv/KnobKnob -->
+		<script src="js/transform.js"></script>
+		<script src="js/knobKnob.jquery.js"></script>
+
+		<script type="text/javascript" src="js/jquery.cassette.js"></script>
+		<script type="text/javascript">	
+			$(function() {
+				//send call to server to fetch song list
+					xhttp = new XMLHttpRequest();
+					xhttp.onreadystatechange = function () {
+						if (this.readyState == 4 && this.status == 200) {
+							let data = JSON.parse(this.responseText);
+							let songData = [];
+							for (const key of Object.keys(data)) {
+								songData.push(data[key]);
+							}
+							let songs = {'songs':songData};
+							console.log(songs);
+							$( '#vc-container' ).cassette(songs);
+						}
+					};
+					xhttp.open("POST", "php/songs.json", true);
+					xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+					xhttp.send();
+				});
+		</script>
+    </body>
+</html>
